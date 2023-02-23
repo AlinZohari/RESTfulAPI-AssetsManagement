@@ -31,4 +31,21 @@ geoJSON.route('/testGeoJSON').get(function(req,res){
 //export function so that the route can be published to the dataAPI.js server
 module.exports = geoJSON;
 
+//extending geoJSON code to run simple query - returning all the data in a table
+geoJSON.get('/postgistest', function(req,res){
+    pool.connect(function(err,client,done){
+        if(err){
+            console.log("not able to get connection " + err);
+            res.status(400).send(err);
+        }
+        client.query('select*from information_schema.columns',function(err,result){
+            done();
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
+});
 
