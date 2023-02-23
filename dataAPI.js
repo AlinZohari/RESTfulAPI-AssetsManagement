@@ -28,7 +28,10 @@ app.use(function(req,res,next){
 app.use(function(req,res,next){
 	let filename = path.basename(req.url);
 	let extension = path.extname(filename);
-	console.log("The file" + filename + "was requested.");
+	console.log("The file" + filename + " was requested.");
 	next();
 })
 
+//route
+const geoJSON = require('./routes/geoJSON');
+app.use('/geojson',geoJSON);
