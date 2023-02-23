@@ -16,4 +16,19 @@ app.get('/',function(req,res){
 	res.send("Hello World from the Data API" + "<br>The date is" + new Date());
 });
 
+//adding functionality to allow cross-origin queries
+app.use(function(req,res,next){
+	res.setHeader("Access-Control-Allow-Origin","*");
+	res.setHeader("Access-Control-Allow-Headers","X-Requested-With");
+	res.setHeader('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
+	next();
+})
+
+//adding functionality to log the requests
+app.use(function(req,res,next){
+	let filename = path.basename(req.url);
+	let extension = path.extname(filename);
+	console.log("The file" + filename + "was requested.");
+	next();
+})
 
