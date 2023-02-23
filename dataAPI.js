@@ -10,10 +10,10 @@ let fs = require('fs');
 let http = require('http');
 
 let httpServer = http.createServer(app);
-
 httpServer.listen(4480);
 
 app.get('/',function(req,res){
-	res.send("hello world from the Data API" + now());
+	res.send("Hello World from the Data API" + "<br>The date is" + new Date());
 });
+
 
