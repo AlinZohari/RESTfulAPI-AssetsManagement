@@ -10,7 +10,7 @@ const userInfo = os.userInfo();
 const username = userInfo.username;
 console.log(username);
 //locate the database login details
-const configtext = "" + fs.readFileSync("/home/"+username+"/certs/postGISConnection.js");
+const configtext = "" + fs.readFileSync("/home/" +username+ "/certs/postGISConnection.js");
 
 //now convert the configuration file into the correct format -i.e. a name/value pair array
 const configarray = configtext.split(",");
@@ -28,8 +28,6 @@ geoJSON.route('/testGeoJSON').get(function(req,res){
 	res.json({message:req.originalUrl});
 });
 
-//export function so that the route can be published to the dataAPI.js server
-module.exports = geoJSON;
 
 //extending geoJSON code to run simple query - returning all the data in a table
 geoJSON.get('/postgistest', function(req,res){
@@ -38,7 +36,7 @@ geoJSON.get('/postgistest', function(req,res){
             console.log("not able to get connection " + err);
             res.status(400).send(err);
         }
-        client.query('select*from information_schema.columns',function(err,result){
+        client.query(' select * from information_schema.columns' ,function(err,result){
             done();
             if(err){
                 console.log(err);
@@ -51,19 +49,22 @@ geoJSON.get('/postgistest', function(req,res){
 
 
 //extracting the data as GeoJSON -database contains some points of interest
-geoJSON.get('/getSensors',function(req,res){
-    pool.connect(function(err,client,done){
-        if (err){
-            console.log("not able to get connection " + err);
+geoJSON.get('/getSensors', function (req,res) {
+    pool.connect(function(err,client,done) {
+        if(err){
+            console.log("not able to get connection "+ err);
             res.status(400).send(err);
-        }
-        let querystring = " SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ";
-        querystring = querystring + "(SELECT 'Feature' As type, ST_AsGeoJSON(st_transform(lg.location,4326))::json As geometry, ";
-        querystring = querystring + "row_to_json((SELECT 1 FROM (SELECT sensor_id, sensor_name, sensor_make, sensor_installation_date, room_id) As 1)) As properties";
-        querystring = querystring + " FROM ucfscde.temperature_sensors As lg limit 100 ) As f";
-
-        client.query(querystring,function(err,result){
-            done();
+        } 
+        let querystring = " SELECT 'FeatureCollection' As type,     array_to_json(array_agg(f)) As features FROM ";
+        console.log(querystring);
+        querystring = querystring + "(SELECT 'Feature' As type , ST_AsGeoJSON(st_transform(lg.location,4326))::json As geometry, ";
+        console.log(querystring);
+        querystring = querystring + "row_to_json((SELECT l FROM (SELECT sensor_id, sensor_name, sensor_make, sensor_installation_date, room_id) As l )) As properties";
+        console.log(querystring);
+        querystring = querystring + " FROM ucfscde.temperature_sensors As lg limit 100 ) As f"; 
+        console.log(querystring);
+        client.query(querystring,function(err,result) {
+            done(); 
             if(err){
                 console.log(err);
                 res.status(400).send(err);
@@ -72,4 +73,6 @@ geoJSON.get('/getSensors',function(req,res){
         });
     });
 });
-
+    
+//this has to be at the bottom- export function so that the route can be published to the dataAPI.js server
+module.exports = geoJSON;

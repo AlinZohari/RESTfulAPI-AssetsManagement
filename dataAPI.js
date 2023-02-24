@@ -24,7 +24,7 @@ app.use(function(req,res,next){
 	next();
 })
 
-//adding functionality to log the requests
+//adding functionality to log the requests (parsing)
 app.use(function(req,res,next){
 	let filename = path.basename(req.url);
 	let extension = path.extname(filename);
