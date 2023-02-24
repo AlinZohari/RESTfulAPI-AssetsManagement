@@ -10,7 +10,7 @@ const userInfo = os.userInfo();
 const username = userInfo.username;
 console.log(username);
 //locate the database login details
-const configtext = "" + fs.readFileSync("/home/"+username+"/code/cege0043-api-22-23-AlinZohari/certs/postGISConnection.js");
+const configtext = "" + fs.readFileSync("/home/"+username+"/certs/postGISConnection.js");
 
 //now convert the configuration file into the correct format -i.e. a name/value pair array
 const configarray = configtext.split(",");
