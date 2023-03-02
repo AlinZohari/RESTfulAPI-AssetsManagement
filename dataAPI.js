@@ -16,7 +16,8 @@ app.get('/',function(req,res){
 	res.send("Hello World from the Data API" + "<br>The date is" + new Date());
 });
 
-//adding functionality to allow cross-origin queries
+//adding functionality to allow cross-origin queries- enabling a cross origin request means that the code on the servers can also reference these resources.
+//This is particularly usefull for a Data API so that any develoer can access the data.
 app.use(function(req,res,next){
 	res.setHeader("Access-Control-Allow-Origin","*");
 	res.setHeader("Access-Control-Allow-Headers","X-Requested-With");
@@ -35,3 +36,4 @@ app.use(function(req,res,next){
 //route
 const geoJSON = require('./routes/geoJSON');
 app.use('/geojson',geoJSON);
+ 
