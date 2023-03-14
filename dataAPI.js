@@ -41,8 +41,8 @@ app.use(function(req,res,next){
 })
 
 //route
-const geoJSON = require('./routes/geoJSON');
-app.use('/geojson',geoJSON);
+/*const geoJSON = require('./routes/geoJSON');
+app.use('/geojson',geoJSON);*/
  
  //crud route
 const crud = require('./routes/crud');
