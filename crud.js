@@ -23,3 +23,6 @@ for (let i = 0; i < configarray.length; i++) {
 let pool = new pg.Pool(config);
 console.log(config);
 
+//add data parser functionality to the API-so that the NodeJS code can read through the individual name/value pairs that are posted by the form
+const bodyParser = require('body-parser');
+crud.use(bodyParser.urlencoded({ extended: true }));
