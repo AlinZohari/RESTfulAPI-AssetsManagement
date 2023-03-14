@@ -18,19 +18,19 @@ app.get('/',function(req,res){
 
 //adding functionality to allow cross-origin queries- enabling a cross origin request means that the code on the servers can also reference these resources.
 //This is particularly usefull for a Data API so that any develoer can access the data.
-/*app.use(function(req,res,next){
+app.use(function(req,res,next){
 	res.setHeader("Access-Control-Allow-Origin","*");
 	res.setHeader("Access-Control-Allow-Headers","X-Requested-With");
 	res.setHeader('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
 	next();
-}) */
+}) 
 
 // adding CORS - for crud.js
 app.use(function(req, res, next) {
 res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
 res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 next();
-});
+}); 
 
 //adding functionality to log the requests (parsing)
 app.use(function(req,res,next){
@@ -40,9 +40,10 @@ app.use(function(req,res,next){
 	next();
 })
 
+
 //route
-/*const geoJSON = require('./routes/geoJSON');
-app.use('/geojson',geoJSON);*/
+const geoJSON = require('./routes/geoJSON');
+app.use('/geojson',geoJSON);
  
  //crud route
 const crud = require('./routes/crud');

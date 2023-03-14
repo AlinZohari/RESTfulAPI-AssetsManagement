@@ -1,5 +1,7 @@
 //CRUD stands for Create,Read,Update,Delete
 
+"use strict";
+
 let express = require('express');
 let pg = require('pg');
 let crud = require('express').Router();
@@ -9,7 +11,6 @@ let os = require('os');
 const userInfo = os.userInfo();
 const username = userInfo.username;
 console.log(username);
-
 // locate the database login details
 let configtext = ""+fs.readFileSync("/home/"+username+"/certs/postGISConnection.js");
 
@@ -28,9 +29,7 @@ const bodyParser = require('body-parser');
 crud.use(bodyParser.urlencoded({ extended: true }));
 
 
-
 //adding a route called /testCRUD with two endpoints -one for the GET and one for POST
-
 // test endpoint for GET requests (can be called from a browser URL or AJAX)
 crud.get('/testCRUD',function (req,res) {
 res.json({message:req.originalUrl+" " +"GET REQUEST"});
@@ -40,3 +39,6 @@ res.json({message:req.originalUrl+" " +"GET REQUEST"});
 crud.post('/testCRUD',function (req,res) {
 res.json({message:req.body});
 });
+
+//this line should be always at the end of the file
+module.exports = crud;
