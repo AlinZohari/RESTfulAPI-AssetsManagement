@@ -88,7 +88,7 @@ geoJSON.get('/geoJSONUserId/:user_id', function(req,res){
  * endpoint: assetsInGreatCondition
  * return: json
  */
-geoJSON.get('assetsInGreatCondition', function(req,res){
+geoJSON.get('/assetsInGreatCondition', function(req,res){
     pool.connect(function(err,client,done) {
         if(err){
              console.log("Not able to get connection "+ err);
@@ -333,6 +333,7 @@ geoJSON.get('/conditionReportMissing/:user_id', function(req,res){
             res.status(200).send(result.rows);
         });
     });
+});
 
 
 
