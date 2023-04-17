@@ -44,7 +44,7 @@ res.json({message:req.body});
 
 //---------------------------------------------------------------------------------------------------------------
 //creating CRUD to get user_id
-crud.get('getUserId',function(req,res){
+crud.get('/userId',function(req,res){
 	pool.connect(function(err,client,done){
 		if(err){
 			console.log("Not able to get connection" + err);
@@ -67,7 +67,35 @@ crud.get('getUserId',function(req,res){
 
 //--------------------------------------------------------------------------------------------------------------
 //creating crud.post for assetPoint and conditionInformation
+crud.post('/assetPoint', function(req,res){
+	pool.connect(function(err,client,done){
+		if(err){
+			console.log("Not able to get connection" + err);
+			res.status(400).send(err);
+			}
+			
+			let asset_name = req.body.asset_name;
+			let installation_date = req.body.installation_date;
+			let latitude = req.body.latitude;
+			let longitude = req.body.longitude;
+			let location = req.body.location;
 
+			let geometrystring = "ST_GeomFromText('POINT("+req.body.latitude+" "+req.body.longitude+")',4326)";
+			//inserting new record usind INSERT INTO (*tablenames*) VALUES (*value1, value2, value3...*)
+			let querystring = "INSERT INTO cege0043.asset_information(asset_name, installation_date, location) VALUES ";
+			querystring += "($1,$2,";
+			querystring += geometrystring +")";
+
+			console.log(querystring);
+			client.querystring(querystring,[asset_name, installation_date], function (err, result){
+				done();
+				if(err){
+					res.status(400).send(err);
+				}
+				res.status(200).send("Thank you.\n Asset: "+req.body.asset_name+ "had been inserted");
+			});
+	});
+});
 
 //this line should be always at the end of the file
 module.exports = crud;
