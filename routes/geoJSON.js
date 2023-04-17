@@ -32,11 +32,11 @@ geoJSON.route('/testGeoJSON').get(function (req,res) {
  res.json({message:req.originalUrl});
  });
 
-//creating endpoints for assignment 5 requirement start here
+//creating endpoints for assignment 5 requirement start here - adapt, reference and with the help of SQL file in moodle by Claire Ellul
 //---------------------------------------------------------------------------------------------
 /**
- * geoJSONUserId
- * input:user_id
+ * endpoint: geoJSONUserId/:user_id
+ * input takes:user_id
  * return: (geojson) asset_id, asset_name, installation_date,condition_description
  */
 geoJSON.get('/geoJSONUserId/:user_id', function(req,res){
@@ -51,11 +51,12 @@ geoJSON.get('/geoJSONUserId/:user_id', function(req,res){
         //create the required geoJSON format using a query adapted from here:
         //http://www.postgresonline.com/journal/archives/267-Creating-GeoJSON-Feature-Collections-with-JSON-and-PostGIS-functions.html
 
-        let querystring = " SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM";
-        querystring += " (SELECT 'Feature' As type , ST_AsGeoJSON(lg.location)::json As geometry,";
-        querystring += " row_to_json((SELECT l FROM (SELECT "+colnames+") As l )) As properties";
-        querystring += " FROM cege0043.asset_with_latest_condition As lg";
-        querystring += " WHERE user_id = $1 limit 100 ) As f";
+        let querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ";
+        querystring += "(SELECT 'Feature' As type , ST_AsGeoJSON(lg.location)::json As geometry, "; //do we need st_transform?
+        querystring += "row_to_json((SELECT l FROM (SELECT "+colnames+") As l )) As properties ";
+        querystring += "FROM cege0043.asset_with_latest_condition As lg ";
+        querystring += "WHERE user_id = $1 limit 100 ) As f";
+        
         console.log(querystring);
         console.log(user_id);
         
@@ -70,8 +71,57 @@ geoJSON.get('/geoJSONUserId/:user_id', function(req,res){
     });
 });
 
-//-------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------
+/**
+ * SQL file: Asset Location Menu Item endpoint
+ * L1: List of Assets in Best Condition
+ *  - a list of all the assets that have at east one report(at any point in time)
+ *    saying that they are in the best condition (via a menu option)
+ * L2: Daily Reporting Rates Graph - All Users
+ *  - bar graph showing daily reporting rates for the past week(how many reports have been submitted,
+ *    how many reports have been submitted with the worst condition values) (as a menu option)
+*/
+//---------------------------------------------
+/**
+ * L1: List of Assets in Best Condition (Advanced Functionality 2)
+ * endpoint: assetsInGreatCondition
+ * return: json
+ */
+geoJSON.get('assetsInGreatCondition', function(req,res){
+    pool.connect(function(err,client,done) {
+        if(err){
+             console.log("Not able to get connection "+ err);
+             res.status(400).send(err);
+        }
+        
+        var querystring = "SELECT array_to_json (array_agg(d)) FROM ";
+        querystring += "(SELECT c.* FROM cege0043.asset_information c ";
+        querystring += "INNER JOIN ";
+        querystring += "(SELECT COUNT(*) AS best_condition, asset_id FROM cege0043.asset_condition_information "
+        querystring += "WHERE "; 
+        querystring += "condition_id IN (SELECT id FROM cege0043.asset_condition_options WHERE condition_description LIKE '%very good%') "
+        querystring += "GROUP BY asset_id "
+        querystring += "ORDER BY best_condition DESC) b "
+        querystring += "ON b.asset_id = c.id) d" ;
+        
+        console.log(querystring)
 
+        client.query(querystring,function(err,result){
+            done(); 
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
+});
+//---------------------------------------------
+/**
+ * L2: Daily Reporting Rates Graph - All Users (Advanced Functionality 2)
+ * endpoint: dailyParticipationRates
+ * return: json
+ */
 
 
 

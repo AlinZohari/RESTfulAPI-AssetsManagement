@@ -66,11 +66,10 @@ crud.get('/userId',function(req,res){
 });
 
 //--------------------------------------------------------------------------------------------------------------
-//creating crud.post for assetPoint and conditionInformation
+//creating crud.post for insertAssetPoint and insertConditionInformation (adapt and with the help of SQL file in moodle by Claire Ellul)
 
-//crud.post for /assetPoint -------------------------------------------
-crud.post('/assetPoint', function(req,res){
-	console.log('assetPoint')
+//crud.post for /insertAssetPoint -------------------------------------------
+crud.post('/insertAssetPoint', function(req,res){
 	pool.connect(function(err,client,done){
 		if(err){
 			console.log("Not able to get connection" + err);
@@ -83,9 +82,9 @@ crud.post('/assetPoint', function(req,res){
 			let longitude = req.body.longitude;
 			let location = req.body.location;
 
-			let geometrystring = "ST_GeomFromText('POINT("+req.body.latitude+" "+req.body.longitude+")',4326)";
+			var geometrystring = "ST_GeomFromText('POINT("+req.body.latitude+" "+req.body.longitude+")',4326)";
 			//inserting new record usind INSERT INTO (*tablenames*) VALUES (*value1, value2, value3...*)
-			let querystring = "INSERT INTO cege0043.asset_information(asset_name, installation_date, location) VALUES ";
+			var querystring = "INSERT INTO cege0043.asset_information(asset_name, installation_date, location) VALUES ";
 			querystring += "($1,$2,";
 			querystring += geometrystring +")";
 
@@ -100,8 +99,8 @@ crud.post('/assetPoint', function(req,res){
 	});
 });
 
-//crud.post for /conditionInformation -------------------------------------
-crud.post('/conditionInformation', function(req,res){
+//crud.post for /insertConditionInformation -------------------------------------
+crud.post('/insertConditionInformation', function(req,res){
 	console.log(req.body);
 	pool.connect(function(err,client,done){
 		if(err){
@@ -114,7 +113,7 @@ crud.post('/conditionInformation', function(req,res){
 			let condition_description = req.body.condition_description;
 			let asset_id = req.body.asset_id;
 
-			let querystring = "INSERT INTO cege0043.asset_condition_information(asset_id, condition_id) VALUES(";
+			var querystring = "INSERT INTO cege0043.asset_condition_information(asset_id, condition_id) VALUES(";
 			querystring += "(SELECT id FROM cege0043.asset_information WHERE asset_name = $1), (SELECT id FROM cege0043.asset_condition.options WHERE condition.description = $2))";
 			console.log(querystring);
 			client.query(querystring,[asset_name, condition_description], function(err, result){
