@@ -301,7 +301,38 @@ geoJSON.get('/lastFiveConditionReports/:user_id', function(req,res){
  * endpoint: /conditionReportMissing/:user_id
  * return: GeoJSON
  */
+geoJSON.get('/conditionReportMissing/:user_id', function(req,res){
+    pool.connect(function(err,client,done) {
+        if(err){
+             console.log("Not able to get connection "+ err);
+             res.status(400).send(err);
+            }
+        
+        let user_id = req.params.user_id;
 
+        var querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) AS features ";
+        querystring += "FROM ";
+        querystring += "(SELECT 'Feature' As type, ST_AsGeoJSON(lg.location)::json AS geometry, ";
+        querystring += "row_to_json((SELECT l FROM (SELECT asset_id, asset_name, installation_date, latest_condition_report_date, condition_description) AS l )) AS properties ";
+        querystring += "FROM ";
+        querystring += "(SELECT * FROM cege0043.asset_with_latest_condition ";
+        querystring += "WHERE user_id = $1 AND ";
+        querystring += "asset_id NOT IN (";
+        querystring += "SELECT asset_id FROM cege0043.asset_condition_information ";
+        querystring += "WHERE user_id = $1 AND ";
+        querystring += "timestamp > NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-3)) AS lg) AS f";
+
+        console.log(querystring);
+        
+        client.query(querystring,[user_id],function(err,result){
+            done(); 
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
 
 
 
