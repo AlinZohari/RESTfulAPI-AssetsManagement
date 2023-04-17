@@ -74,16 +74,17 @@ geoJSON.get('/geoJSONUserId/:user_id', function(req,res){
 //------------------------------------------------------------------------------------------------------------------------
 /**
  * SQL file: Asset Location Menu Item endpoints
- * L1: List of Assets in Best Condition
+ * L1: List of Assets in Best Condition (Advanced Functionality 2)
  *  - a list of all the assets that have at east one report(at any point in time)
  *    saying that they are in the best condition (via a menu option)
- * L2: Daily Reporting Rates Graph - All Users
+ * L2: Daily Reporting Rates Graph - All Users (Advanced Functionality 2)
  *  - bar graph showing daily reporting rates for the past week(how many reports have been submitted,
  *    how many reports have been submitted with the worst condition values) (as a menu option)
 */
 //---------------------------------------------
 /**
- * L1: List of Assets in Best Condition (Advanced Functionality 2)
+ * Asset Location App (L1: List of Assets in Best Condition)
+ * description: list of all the assets with at least one report saying that they are in the best condition  (via a menu option) 
  * endpoint: assetsInGreatCondition
  * return: json
  */
@@ -118,7 +119,8 @@ geoJSON.get('assetsInGreatCondition', function(req,res){
 });
 //---------------------------------------------
 /**
- * L2: Daily Reporting Rates Graph - All Users (Advanced Functionality 2)
+ * Asset Location App (L2: Daily Reporting Rates Graph - All Users)
+ * description: graph showing daily reporting rates for the past week (how many reports have been submitted, and how many of these had condition as one of the two 'not working' options) (as a menu option)
  * endpoint: dailyParticipationRates
  * return: json
  */
@@ -155,9 +157,57 @@ geoJSON.get('/dailyParticipationRates', function(req,res){
 //-----------------------------------------------------------------------------------------------------------------------
 /**
  * SQL file: Condition Assesment Menu Item endpoints
- * 
- * 
+ * S1: User Ranking (Advanced Functionality 1)
+ *  - user is given their ranking based on the number of condition reports created
+ *    (in comparison to all other users)
+ * S2: Add Layer - 5 closest assets (Advanced Functionality 2)
+ *  - map layer showing the 5 assets closest to the user's current location, added by any user.
+ *    the layer must be added and removed via a menu option.
+ *    the user should not be allowed to provide a condition report for these assets
+ * S3: Add Layer - last 5 reports, colour coded (Advanced Functionality 2)
+ *  - map howing the last 5 reports created by the specific user (colour coded depending on the condition value).
+ *    the layer should be added/removed via menu option. The user should not be allowed to provide a condition report for these assets
+ * S4: Add Layer - not rated in the last 3 days (Advanced Functionality 2)
+ *  - map layer that shows the user;s asstes that the user has not rated in the last 3 days (via menu option)
+ *    The user should not be allowed t provide a condition report for these assets
 */
+//---------------------------------------------
+/**
+ * Condition App (S1: User Ranking)
+ * description: user is given their ranking (based on condition reports, in comparison to all other users) (as a menu option)
+ * endpoint: userRanking/:user_id
+ */
+geoJSON.get('/userRanking/:user_id', function(req, res){
+    pool.connect(function(err,client,done) {
+        if(err){
+             console.log("Not able to get connection "+ err);
+             res.status(400).send(err);
+            }
+        
+        let user_id = req.params.user_id;
+
+        var querystring = "SELECT array_to_json (array_agg(hh)) ";
+        querystring += "FROM ";
+        querystring += "(SELECT c.rank FROM (SELECT b.user_id, rank()over (ORDER BY num_reports DESC) AS rank ";
+        querystring += "FROM "
+        querystring += "(SELECT COUNT(*) AS num_reports, user_id FROM cege0043.asset_condition_information GROUP BY user_id) b) c ";
+        querystring += "WHERE ";
+        querystring += "c.user_id = $1) hh";
+
+        console.log(querystring);
+        console.log(user_id);
+        
+        client.query(querystring,function(err,result){
+            done(); 
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
+});
+
 
 
 
