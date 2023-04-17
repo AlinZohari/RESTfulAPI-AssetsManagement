@@ -27,12 +27,57 @@
  const pool = new pg.Pool(config);
  console.log(config);
 
-
 //simple test to show that the route is working
 geoJSON.route('/testGeoJSON').get(function (req,res) {
  res.json({message:req.originalUrl});
  });
 
+//creating endpoints for assignment 5 requirement start here
+//---------------------------------------------------------------------------------------------
+/**
+ * geoJSONUserId
+ * input:user_id
+ * return: (geojson) asset_id, asset_name, installation_date,condition_description
+ */
+geoJSON.get('/geoJSONUserId/:user_id', function(req,res){
+    pool.connect(function(err,client,done) {
+        if(err){
+             console.log("Not able to get connection "+ err);
+             res.status(400).send(err);
+        } 
+        let user_id = req.params.user_id;
+        let colnames = "asset_id,asset_name, installation_date, condition_description";
+
+        //create the required geoJSON format using a query adapted from here:
+        //http://www.postgresonline.com/journal/archives/267-Creating-GeoJSON-Feature-Collections-with-JSON-and-PostGIS-functions.html
+
+        let querystring = " SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM";
+        querystring += " (SELECT 'Feature' As type , ST_AsGeoJSON(lg.location)::json As geometry,";
+        querystring += " row_to_json((SELECT l FROM (SELECT "+colnames+") As l )) As properties";
+        querystring += " FROM cege0043.asset_with_latest_condition As lg";
+        querystring += " WHERE user_id = $1 limit 100 ) As f";
+        console.log(querystring);
+        console.log(user_id);
+        
+        client.query(querystring,function(err,result){
+            done(); 
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
+});
+
+//-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+ /*
 //extending geoJSON code to run simple query - returning all the data in a table
 geoJSON.get('/postgistest', function (req,res) {
     pool.connect(function(err,client,done) {
@@ -155,6 +200,7 @@ console.log(querystring);
 }); // end of the pool
 }); // end of the function
 
+*/
 
 //this has to be at the bottom- export function so that the route can be published to the dataAPI.js server
 module.exports = geoJSON;
