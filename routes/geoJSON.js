@@ -293,6 +293,16 @@ geoJSON.get('/lastFiveConditionReports/:user_id', function(req,res){
     });
 });
 
+//---------------------------------------------
+/**
+ * Condition App (S4: Add Layer - Not rated in the last 3 days)
+ * description: App only shows assets and calculates proximity alerts for assets that the user hasn’t already given a condition report for in the last 3 days 
+ * so generate a list of the user's assets for which no condition report exists
+ * endpoint: /conditionReportMissing/:user_id
+ * return: GeoJSON
+ */
+
+
 
 
 //this has to be at the bottom- export function so that the route can be published to the dataAPI.js server
