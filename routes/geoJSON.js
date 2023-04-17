@@ -252,6 +252,46 @@ geoJSON.get('/userFiveClosestAssets/:latitude/:longitude', function(req,res){
     });
 });
 
+//---------------------------------------------
+/**
+ * Condition App (S3: Add Layer - last 5 reports, colour coded)
+ * description: map showing the last 5 reports that the user created (colour coded depending on the conditition rating)
+ * endpoint: /lastFiveConditionReports/:user_id
+ * return: GeoJSON
+ */
+geoJSON.get('/lastFiveConditionReports/:user_id', function(req,res){
+    pool.connect(function(err,client,done) {
+        if(err){
+             console.log("Not able to get connection "+ err);
+             res.status(400).send(err);
+            }
+        
+        let asset_name = req.params.asset_name;
+        let condition_description = req.params.condition_description;
+        let user_id = req.params.user_id;
+
+        var querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) AS features ";
+        querystring += "FROM ";
+        querystring += "(SELECT 'Feature' As type, ST_AsGeoJSON(lg.location)::json AS geometry, ";
+        querystring += "row_to_json((SELECT l FROM (SELECT id, user_id, asset_name, condition_description) AS l )) AS properties ";
+        querystring += "FROM ";
+        querystring += "(SELECT * FROM cege0043.condition_reports_with_text_descriptions WHERE user_id = $1 ";
+        querystring += "ORDER BY timestamp DESC ";
+        querystring += "limit 5) AS lg) AS f";
+
+        console.log(querystring);
+        console.log(user_id);
+        
+        client.query(querystring,[user_id],function(err,result){
+            done(); 
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
+});
 
 
 
