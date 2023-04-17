@@ -6,13 +6,14 @@ let express = require('express');
 let pg = require('pg');
 let crud = require('express').Router();
 let fs = require('fs');
-
 let os = require('os');
+
 const userInfo = os.userInfo();
 const username = userInfo.username;
 console.log(username);
 // locate the database login details
 let configtext = ""+fs.readFileSync("/home/"+username+"/certs/postGISConnection.js");
+let user_id;
 
 // now convert the configruation file into the correct format -i.e. a name/value pair array
 let configarray = configtext.split(",");
@@ -24,7 +25,8 @@ for (let i = 0; i < configarray.length; i++) {
 let pool = new pg.Pool(config);
 console.log(config);
 
-//add data parser functionality to the API-so that the NodeJS code can read through the individual name/value pairs that are posted by the form
+//add data parser functionality to the API
+//so that the NodeJS code can read through the individual name/value pairs that are posted by the form
 const bodyParser = require('body-parser');
 crud.use(bodyParser.urlencoded({ extended: true }));
 
@@ -39,6 +41,33 @@ res.json({message:req.originalUrl+" " +"GET REQUEST"});
 crud.post('/testCRUD',function (req,res) {
 res.json({message:req.body});
 });
+
+//---------------------------------------------------------------------------------------------------------------
+//creating CRUD to get user_id
+crud.get('getUserId',function(req,res){
+	pool.connect(function(err,client,done){
+		if(err){
+			console.log("Not able to get connection" + err);
+			res.status(400).send(err);
+		}
+
+		let querystring = "SELECT user_id FROM ucfscde.users WHERE user_name = current_user";
+		console.log(querystring)
+		client.query(querystring, function(err,result){
+			done();
+			if(err){
+				res.status(400).send(err);
+			}
+			res.status(200).send(result.rows[0]);
+			let user_id = result.rows[0].user_id;
+			console.log(user_id);
+		});
+	});
+});
+
+//--------------------------------------------------------------------------------------------------------------
+//creating crud.post for assetPoint and conditionInformation
+
 
 //this line should be always at the end of the file
 module.exports = crud;

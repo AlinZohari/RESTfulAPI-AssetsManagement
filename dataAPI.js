@@ -8,7 +8,6 @@ let fs = require('fs');
 
 //add an https server to serve files
 let http = require('http');
-
 let httpServer = http.createServer(app);
 httpServer.listen(4480);
 
@@ -17,7 +16,7 @@ app.get('/',function(req,res){
 });
 
 //adding functionality to allow cross-origin queries- enabling a cross origin request means that the code on the servers can also reference these resources.
-//This is particularly usefull for a Data API so that any develoer can access the data.
+//This is particularly usefull for a Data API so that any developer can access the data.
 app.use(function(req,res,next){
 	res.setHeader("Access-Control-Allow-Origin","*");
 	res.setHeader("Access-Control-Allow-Headers","X-Requested-With");
