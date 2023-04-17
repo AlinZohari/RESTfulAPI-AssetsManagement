@@ -71,7 +71,7 @@ geoJSON.get('/geoJSONUserId/:user_id', function(req,res){
     });
 });
 
-//------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
 /**
  * SQL file: Asset Location Menu Item endpoints
  * L1: List of Assets in Best Condition
@@ -152,7 +152,12 @@ geoJSON.get('/dailyParticipationRates', function(req,res){
     });
 });
 
-
+//-----------------------------------------------------------------------------------------------------------------------
+/**
+ * SQL file: Condition Assesment Menu Item endpoints
+ * 
+ * 
+*/
 
 
 
