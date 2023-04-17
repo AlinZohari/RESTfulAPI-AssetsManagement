@@ -208,6 +208,50 @@ geoJSON.get('/userRanking/:user_id', function(req, res){
     });
 });
 
+//---------------------------------------------
+/**
+ * Condition App (S2: Add Layer - 5 closest assets)
+ * description: map layer showing the 5 assets closest to the user’s current location, added by any user.  The layer must be added/removed via a menu option
+ * endpoint: userFiveClosestAssets/:latitude/:longitude
+ * return: GeoJSON for display purpose
+ */
+geoJSON.get('/userFiveClosestAssets/:latitude/:longitude', function(req,res){
+    pool.connect(function(err,client,done) {
+        if(err){
+             console.log("Not able to get connection "+ err);
+             res.status(400).send(err);
+            }
+
+        let latitude = req.params.latitude;
+        let longitude = req.params.longitude;
+        let location = req.params.location;
+        let user_id = req.params.user_id;
+
+        var querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) AS features ";
+        querystring += "FROM ";
+        querystring += "(SELECT 'Feature' As type, ST_AsGeoJSON(lg.location)::json AS geometry, ";
+        querystring += "row_to_json((SELECT l FROM (SELECT id, asset_name, installation_date) As l )) AS properties ";
+        querystring += "FROM ";
+        querystring += "(SELECT c.* FROM cege0043.asset_information c ";
+        querystring += "INNER JOIN ";
+        querystring += "(SELECT id, ST_DISTANCE(a.location, ST_GeomFromText('POINT("+latitude+""+longitude+")',4326)) AS distance ";//check the lat/lng position?
+        querystring += "FROM cege0043.asset_information a ";
+        querystring += "ORDER BY distance ASC ";
+        querystring += "limit 5) b ";
+        querystring += "ON c.id = b.id) AS lg) AS f";
+
+        console.log(querystring);
+        client.query(querystring,function(err,result){
+            done(); 
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
+});
+
 
 
 
