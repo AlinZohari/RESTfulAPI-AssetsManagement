@@ -207,7 +207,7 @@ geoJSON.get('/dailyParticipationRates', function(req,res){
  *  - map layer showing the 5 assets closest to the user's current location, added by any user.
  *    the layer must be added and removed via a menu option.
  *    the user should not be allowed to provide a condition report for these assets
- * S3: Add Layer - last 5 reports, colour coded
+ * S3: Add Layer - last 5 reports, colour coded (6 colours)
  *  - map howing the last 5 reports created by the specific user (colour coded depending on the condition value).
  *    the layer should be added/removed via menu option. The user should not be allowed to provide a condition report for these assets
  * S4: Add Layer - not rated in the last 3 days
