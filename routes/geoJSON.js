@@ -261,7 +261,7 @@ geoJSON.get('/userRanking/:user_id', function(req, res){
  * return: GeoJSON for display purpose
  */
 geoJSON.get('/userFiveClosestAssets/:latitude/:longitude', function(req,res){
-    pool.connect(function(err,client,done) 
+    pool.connect(function(err,client,done){
         if(err){
              console.log("Not able to get connection "+ err);
              res.status(400).send(err);
@@ -294,7 +294,7 @@ geoJSON.get('/userFiveClosestAssets/:latitude/:longitude', function(req,res){
             }
             res.status(200).send(result.rows);
         });
-    );
+    });
 });
 
 //---------------------------------------------
