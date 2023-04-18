@@ -42,6 +42,8 @@ crud.post('/testCRUD',function (req,res) {
 res.json({message:req.body});
 });
 
+
+//creating endpoints for assignment 5 requirement start here - adapt, reference and with the help of SQL file in moodle by Claire Ellul
 //---------------------------------------------------------------------------------------------------------------
 //creating CRUD to get user_id
 crud.get('/userId',function(req,res){
@@ -65,10 +67,7 @@ crud.get('/userId',function(req,res){
 	});
 });
 
-//--------------------------------------------------------------------------------------------------------------
-//creating crud.post for insertAssetPoint and insertConditionInformation (adapt and with the help of SQL file in moodle by Claire Ellul)
-
-//crud.post for /insertAssetPoint -------------------------------------------
+//A1 crud.post for /insertAssetPoint -------------------------------------------
 crud.post('/insertAssetPoint', function(req,res){
 	pool.connect(function(err,client,done){
 		if(err){
@@ -99,7 +98,7 @@ crud.post('/insertAssetPoint', function(req,res){
 	});
 });
 
-//crud.post for /insertConditionInformation -------------------------------------
+// A1 crud.post for /insertConditionInformation -------------------------------------
 crud.post('/insertConditionInformation', function(req,res){
 	console.log(req.body);
 	pool.connect(function(err,client,done){
