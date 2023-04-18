@@ -34,6 +34,7 @@ geoJSON.route('/testGeoJSON').get(function (req,res) {
 
 //creating endpoints for assignment 5 requirement start here - adapt, reference and with the help of SQL file in moodle by Claire Ellul
 //---------------------------------------------------------------------------------------------
+//-----------------------------------------------
 /**
  * A2 (Advanced Fuctionality 1)
  * endpoint: userAssets/:user_id
@@ -75,6 +76,40 @@ geoJSON.get('/userAssets/:user_id', function(req,res){
         });
     });
 });
+//-----------------------------------------------
+/**
+ * Condition App - A3 (Advanced Functionality 1)
+ * endpoint: /userConditionReports/:user_id
+ * description: user is told how many condition reports they have saved, when they add a new condition report
+ *              (xxxx is the user_id of the particular person) $1 is the user_id parameter passed to the query
+ */
+geoJSON.get('/userConditionReports/:user_id', function(req,res){
+    pool.connect(function(err,client,done) {
+        if(err){
+             console.log("Not able to get connection "+ err);
+             res.status(400).send(err);
+        }
+        
+        var user_id = req.params.user_id;
+
+        var querystring = "SELECT array_to_json (array_agg(c)) ";
+        querystring += "FROM ";
+        querystring += "(SELECT COUNT(*) AS num_reports FROM cege0043.asset_condition_information WHERE user_id = $1) c";
+
+        console.log(querystring);
+        console.log(user_id);
+        
+        client.query(querystring[user_id],function(err,result){
+            done(); 
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
+});
+
 
 //------------------------------------------------------------------------------------------------------------------------
 /**
