@@ -78,7 +78,8 @@ geoJSON.get('/userAssets/:user_id', function(req,res){
 });
 //-----------------------------------------------
 /**
- * Condition App - A3 (Advanced Functionality 1)
+ * Condition App
+ * A3 (Advanced Functionality 1)
  * endpoint: /userConditionReports/:user_id
  * description: user is told how many condition reports they have saved, when they add a new condition report
  *              (xxxx is the user_id of the particular person) $1 is the user_id parameter passed to the query
@@ -114,16 +115,17 @@ geoJSON.get('/userConditionReports/:user_id', function(req,res){
 //------------------------------------------------------------------------------------------------------------------------
 /**
  * SQL file: Asset Location Menu Item endpoints
- * L1: List of Assets in Best Condition (Advanced Functionality 2)
+ * L1: List of Assets in Best Condition
  *  - a list of all the assets that have at east one report(at any point in time)
  *    saying that they are in the best condition (via a menu option)
- * L2: Daily Reporting Rates Graph - All Users (Advanced Functionality 2)
+ * L2: Daily Reporting Rates Graph - All Users
  *  - bar graph showing daily reporting rates for the past week(how many reports have been submitted,
  *    how many reports have been submitted with the worst condition values) (as a menu option)
 */
 //---------------------------------------------
 /**
- * Asset Location App (L1: List of Assets in Best Condition)
+ * Asset Location App
+ * L1: List of Assets in Best Condition (Advanced Functionality 2)
  * description: list of all the assets with at least one report saying that they are in the best condition  (via a menu option) 
  * endpoint: assetsInGreatCondition
  * return: json
@@ -159,7 +161,8 @@ geoJSON.get('/assetsInGreatCondition', function(req,res){
 });
 //---------------------------------------------
 /**
- * Asset Location App (L2: Daily Reporting Rates Graph - All Users)
+ * Asset Location App
+ * L2: Daily Reporting Rates Graph - All Users (Advanced Functionality 2)
  * description: graph showing daily reporting rates for the past week (how many reports have been submitted, and how many of these had condition as one of the two 'not working' options) (as a menu option)
  * endpoint: dailyParticipationRates
  * return: json
@@ -197,23 +200,24 @@ geoJSON.get('/dailyParticipationRates', function(req,res){
 //-----------------------------------------------------------------------------------------------------------------------
 /**
  * SQL file: Condition Assesment Menu Item endpoints
- * S1: User Ranking (Advanced Functionality 1)
+ * S1: User Ranking
  *  - user is given their ranking based on the number of condition reports created
  *    (in comparison to all other users)
- * S2: Add Layer - 5 closest assets (Advanced Functionality 2)
+ * S2: Add Layer - 5 closest assets
  *  - map layer showing the 5 assets closest to the user's current location, added by any user.
  *    the layer must be added and removed via a menu option.
  *    the user should not be allowed to provide a condition report for these assets
- * S3: Add Layer - last 5 reports, colour coded (Advanced Functionality 2)
+ * S3: Add Layer - last 5 reports, colour coded
  *  - map howing the last 5 reports created by the specific user (colour coded depending on the condition value).
  *    the layer should be added/removed via menu option. The user should not be allowed to provide a condition report for these assets
- * S4: Add Layer - not rated in the last 3 days (Advanced Functionality 2)
+ * S4: Add Layer - not rated in the last 3 days
  *  - map layer that shows the user;s asstes that the user has not rated in the last 3 days (via menu option)
  *    The user should not be allowed t provide a condition report for these assets
 */
 //---------------------------------------------
 /**
- * Condition App (S1: User Ranking)
+ * Condition App
+ * S1: User Ranking (Advanced Functionality 1)
  * description: user is given their ranking (based on condition reports, in comparison to all other users) (as a menu option)
  * endpoint: userRanking/:user_id
  */
@@ -250,7 +254,8 @@ geoJSON.get('/userRanking/:user_id', function(req, res){
 
 //---------------------------------------------
 /**
- * Condition App (S2: Add Layer - 5 closest assets)
+ * Condition App
+ * S2: Add Layer - 5 closest assets (Advanced Functionality 2)
  * description: map layer showing the 5 assets closest to the user’s current location, added by any user.  The layer must be added/removed via a menu option
  * endpoint: userFiveClosestAssets/:latitude/:longitude
  * return: GeoJSON for display purpose
@@ -294,7 +299,8 @@ geoJSON.get('/userFiveClosestAssets/:latitude/:longitude', function(req,res){
 
 //---------------------------------------------
 /**
- * Condition App (S3: Add Layer - last 5 reports, colour coded)
+ * Condition App
+ * S3: Add Layer - last 5 reports, colour coded (Advanced Functionality 2)
  * description: map showing the last 5 reports that the user created (colour coded depending on the conditition rating)
  * endpoint: /lastFiveConditionReports/:user_id
  * return: GeoJSON
@@ -335,7 +341,8 @@ geoJSON.get('/lastFiveConditionReports/:user_id', function(req,res){
 
 //---------------------------------------------
 /**
- * Condition App (S4: Add Layer - Not rated in the last 3 days)
+ * Condition App
+ * S4: Add Layer - Not rated in the last 3 days (Advanced Functionality 2)
  * description: App only shows assets and calculates proximity alerts for assets that the user hasn’t already given a condition report for in the last 3 days 
  * so generate a list of the user's assets for which no condition report exists
  * endpoint: /conditionReportMissing/:user_id
