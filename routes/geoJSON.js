@@ -24,8 +24,8 @@
 //create a PostgreSQL connection pool using pg package
 // A connection pool is a cache of database connections maintained so that the connections can be reused when needed,
 //instead of creating a new connection every time one is needed
- const pool = new pg.Pool(config);
- console.log(config);
+const pool = new pg.Pool(config);
+console.log(config);
 
 //simple test to show that the route is working
 geoJSON.route('/testGeoJSON').get(function (req,res) {
@@ -136,9 +136,9 @@ geoJSON.get('/dailyParticipationRates', function(req,res){
              res.status(400).send(err);
         }
 
-        let day = req.params.day;
-        let reports_submitted = req.params.reports_submitted;
-        let not_working = req.params.not_working;
+        var day = req.params.day;
+        var reports_submitted = req.params.reports_submitted;
+        var not_working = req.params.not_working;
 
         var querystring = "SELECT  array_to_json (array_agg(c)) FROM "; 
         querystring += "(SELECT day, SUM(reports_submitted) As reports_submitted, ";
@@ -189,7 +189,7 @@ geoJSON.get('/userRanking/:user_id', function(req, res){
              res.status(400).send(err);
             }
         
-        let user_id = req.params.user_id;
+        var user_id = req.params.user_id;
 
         var querystring = "SELECT array_to_json (array_agg(hh)) ";
         querystring += "FROM ";
@@ -221,16 +221,16 @@ geoJSON.get('/userRanking/:user_id', function(req, res){
  * return: GeoJSON for display purpose
  */
 geoJSON.get('/userFiveClosestAssets/:latitude/:longitude', function(req,res){
-    pool.connect(function(err,client,done) {
+    pool.connect(function(err,client,done) 
         if(err){
              console.log("Not able to get connection "+ err);
              res.status(400).send(err);
             }
 
-        let latitude = req.params.latitude;
-        let longitude = req.params.longitude;
-        let location = req.params.location;
-        let user_id = req.params.user_id;
+        var latitude = req.params.latitude;
+        var longitude = req.params.longitude;
+        var location = req.params.location;
+        var user_id = req.params.user_id;
 
         var querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) AS features ";
         querystring += "FROM ";
@@ -254,7 +254,7 @@ geoJSON.get('/userFiveClosestAssets/:latitude/:longitude', function(req,res){
             }
             res.status(200).send(result.rows);
         });
-    });
+    );
 });
 
 //---------------------------------------------
@@ -271,9 +271,9 @@ geoJSON.get('/lastFiveConditionReports/:user_id', function(req,res){
              res.status(400).send(err);
             }
         
-        let asset_name = req.params.asset_name;
-        let condition_description = req.params.condition_description;
-        let user_id = req.params.user_id;
+        var asset_name = req.params.asset_name;
+        var condition_description = req.params.condition_description;
+        var user_id = req.params.user_id;
 
         var querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) AS features ";
         querystring += "FROM ";
@@ -313,7 +313,7 @@ geoJSON.get('/conditionReportMissing/:user_id', function(req,res){
              res.status(400).send(err);
             }
         
-        let user_id = req.params.user_id;
+        var user_id = req.params.user_id;
 
         var querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) AS features ";
         querystring += "FROM ";
