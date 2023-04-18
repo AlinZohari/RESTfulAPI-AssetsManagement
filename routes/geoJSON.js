@@ -35,32 +35,37 @@ geoJSON.route('/testGeoJSON').get(function (req,res) {
 //creating endpoints for assignment 5 requirement start here - adapt, reference and with the help of SQL file in moodle by Claire Ellul
 //---------------------------------------------------------------------------------------------
 /**
- * endpoint: geoJSONUserId/:user_id
+ * A2 (Advanced Fuctionality 1)
+ * endpoint: userAssets/:user_id
+ * description: Code to get only the geoJSON asset locations for a specific user_id
+ *              Use when first loading the web page and also when another layer is removed
  * input takes:user_id
- * return: (geojson) asset_id, asset_name, installation_date,condition_description
+ * return: (geojson) asset_id, asset_name, installation_date, latest_condition_report_date, condition_description
  */
-geoJSON.get('/geoJSONUserId/:user_id', function(req,res){
+geoJSON.get('/userAssets/:user_id', function(req,res){
     pool.connect(function(err,client,done) {
         if(err){
              console.log("Not able to get connection "+ err);
              res.status(400).send(err);
         } 
-        let user_id = req.params.user_id;
-        let colnames = "asset_id,asset_name, installation_date, condition_description";
+        var user_id = req.params.user_id;
+        var colnames = "asset_id, asset_name, installation_date, latest_condition_report_date, condition_description";
 
-        //create the required geoJSON format using a query adapted from here:
-        //http://www.postgresonline.com/journal/archives/267-Creating-GeoJSON-Feature-Collections-with-JSON-and-PostGIS-functions.html
+        // now use the inbuilt geoJSON functionality
+        // and create the required geoJSON format using a query adapted from here:
+        // http://www.postgresonline.com/journal/archives/267-Creating-GeoJSON-Feature-Collections-with-JSON-and-PostGIS-functions.html, accessed 4th January 2018
 
-        let querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ";
-        querystring += "(SELECT 'Feature' As type , ST_AsGeoJSON(lg.location)::json As geometry, "; //do we need st_transform?
-        querystring += "row_to_json((SELECT l FROM (SELECT "+colnames+") As l )) As properties ";
-        querystring += "FROM cege0043.asset_with_latest_condition As lg ";
-        querystring += "WHERE user_id = $1 limit 100 ) As f";
+        // note that query needs to be a single string with no line breaks so built it up bit by bit
+        var querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) AS features  FROM ";
+        querystring += "(SELECT 'Feature' As type, ST_AsGeoJSON(lg.location)::json AS geometry, ";
+        querystring += "row_to_json((SELECT l FROM (SELECT "+colnames+ " ) As l )) AS properties ";
+        querystring += "FROM cege0043.asset_with_latest_condition AS lg ";
+        querystring += "WHERE user_id = $1 limit 100) AS f";
         
         console.log(querystring);
         console.log(user_id);
         
-        client.query(querystring,function(err,result){
+        client.query(querystring[user_id],function(err,result){
             done(); 
             if(err){
                 console.log(err);
