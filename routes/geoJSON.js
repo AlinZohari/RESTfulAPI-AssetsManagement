@@ -251,7 +251,7 @@ geoJSON.get('/userRanking/:user_id', function(req, res){
              console.log("Not able to get connection "+ err);
              res.status(400).send(err);
             }
-        
+           
         var user_id = req.params.user_id;
 
         var querystring = "SELECT array_to_json (array_agg(hh)) ";
@@ -265,12 +265,13 @@ geoJSON.get('/userRanking/:user_id', function(req, res){
         console.log(querystring);
         console.log(user_id);
         
-        client.query(querystring,function(err,result){
+        client.query(querystring, [user_id], function(err,result){
             done(); 
             if(err){
                 console.log(err);
                 res.status(400).send(err);
             }
+            console.log(result);
             res.status(200).send(result.rows);
         });
     });
