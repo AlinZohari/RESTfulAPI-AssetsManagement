@@ -70,34 +70,33 @@ crud.get('/userId',function(req,res){
 //A1 crud.post for /insertAssetPoint -------------------------------------------
 crud.post('/insertAssetPoint', function(req,res){
 	pool.connect(function(err,client,done){
+	  if(err){
+		console.log("Not able to get connection" + err);
+		res.status(400).send(err);
+	  }
+		
+	  let asset_name = req.body.asset_name;
+	  let installation_date = req.body.installation_date;
+  
+	  var geometrystring = "ST_GeomFromText('POINT("+req.body.longitude+" "+req.body.latitude+")',4326)";
+	  console.log(req.body.longitude)
+	  console.log(req.body.latitude)
+	  var querystring = "INSERT INTO cege0043.asset_information(asset_name, installation_date, location) VALUES ";
+	  querystring += "($1,$2,";
+	  querystring += geometrystring + ")";
+  
+	  console.log(querystring);
+	  client.query(querystring, [asset_name, installation_date], function (err, result){
+		done();
 		if(err){
-			console.log("Not able to get connection" + err);
-			res.status(400).send(err);
-			}
-			
-			let asset_name = req.body.asset_name;
-			let installation_date = req.body.installation_date;
-			let latitude = req.body.latitude;
-			let longitude = req.body.longitude;
-			let location = req.body.location;
-
-			var geometrystring = "ST_GeomFromText('POINT("+req.body.latitude+" "+req.body.longitude+")',4326)";
-			//inserting new record usind INSERT INTO (*tablenames*) VALUES (*value1, value2, value3...*)
-			var querystring = "INSERT INTO cege0043.asset_information(asset_name, installation_date, location) VALUES ";
-			querystring += "($1,$2,";
-			querystring += geometrystring +")";
-
-			console.log(querystring);
-			client.querystring(querystring,[asset_name, installation_date], function (err, result){
-				done();
-				if(err){
-					res.status(400).send(err);
-				}
-				res.status(200).send("Thank you.\n Asset: "+req.body.asset_name+ "has been created");
-			});
+			console.log(err)
+		  	res.status(400).send(err);
+		}
+		res.status(200).send("Thank you. Asset has been created");
+	  });
 	});
-});
-
+  });
+  
 // A1 crud.post for /insertConditionInformation -------------------------------------
 crud.post('/insertConditionInformation', function(req,res){
 	console.log(req.body);
@@ -108,20 +107,19 @@ crud.post('/insertConditionInformation', function(req,res){
 			}
 
 			let asset_name = req.body.asset_name;
-			let condition = req.body.condition;
 			let condition_description = req.body.condition_description;
-			let asset_id = req.body.asset_id;
 
 			var querystring = "INSERT INTO cege0043.asset_condition_information(asset_id, condition_id) VALUES(";
-			querystring += "(SELECT id FROM cege0043.asset_information WHERE asset_name = $1), (SELECT id FROM cege0043.asset_condition.options WHERE condition.description = $2))";
+			querystring += "(SELECT id FROM cege0043.asset_information WHERE asset_name = $1), (SELECT id FROM cege0043.asset_condition_options WHERE condition_description = $2))";
+
 			console.log(querystring);
-			client.query(querystring,[asset_name, condition_description], function(err, result){
+			client.query(querystring, [asset_name, condition_description], function(err, result){
 				done();
 				if(err){
 					console.log(err);
 					res.status(400).send(err);
 				}
-				res.status(200).send("Thank you. \n Condition Assesment for "+req.body.asset_name+" has been submitted.");
+				res.status(200).send("Thank you. Condition Assesment has been submitted.");
 		});
 	});
 });

@@ -34,6 +34,30 @@ geoJSON.route('/testGeoJSON').get(function (req,res) {
 
 //creating endpoints for assignment 5 requirement start here - adapt, reference and with the help of SQL file in moodle by Claire Ellul
 //---------------------------------------------------------------------------------------------
+/**
+ * A0 
+ * description: Get the condition status list
+ * endpoint: /conditionDetails
+ */
+geoJSON.get('/conditionDetails', function(req,res){
+    pool.connect(function(err,client,done) {
+        if(err){
+             console.log("Not able to get connection "+ err);
+             res.status(400).send(err);
+        } 
+        var querystring = "select * from cege0043.asset_condition_options";
+
+        console.log(querystring);
+        client.query(querystring, function(err,result){
+            done(); 
+            if(err){
+                console.log(err);
+                res.status(400).send(err);
+            }
+            res.status(200).send(result.rows);
+        });
+    });
+});
 //-----------------------------------------------
 /**
  * A2 (Advanced Fuctionality 1)
@@ -66,7 +90,7 @@ geoJSON.get('/userAssets/:user_id', function(req,res){
         console.log(querystring);
         console.log(user_id);
         
-        client.query(querystring[user_id],function(err,result){
+        client.query(querystring, [user_id],function(err,result){
             done(); 
             if(err){
                 console.log(err);
@@ -100,7 +124,7 @@ geoJSON.get('/userConditionReports/:user_id', function(req,res){
         console.log(querystring);
         console.log(user_id);
         
-        client.query(querystring[user_id],function(err,result){
+        client.query(querystring, [user_id],function(err,result){
             done(); 
             if(err){
                 console.log(err);
