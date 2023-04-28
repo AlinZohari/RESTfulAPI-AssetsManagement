@@ -64,8 +64,9 @@ i. to test /insertAssetPoint endpoint the parameter and data as follows:<br>
 | ------------- | ------------- |
 | asset_name  | hi |
 | installation_date | 2023-04-21 |
-| longitude | -0.1292555  |
 | latitude | 51.5254644 |
+| longitude | -0.1292555  |
+
 <br>
 
 The installation date are in the form of YYYY-MM-DD
@@ -88,14 +89,14 @@ dataAPI.js cretaes a NOde.js server which creates an HTTP server to listedn to i
 The server uses the Express framework, which provides a set of tools for building web applications and APIs.
 dataAPI.js defines two middleware functions which are crud.js and geoJSON.js that will be used for every incoming request. The server starts listening for incoming requests on port 4480 using the 'httpServer.listen()' method.
 
-<b> 4.3 crud.js </b>
-crud.js sets up an API with CRUD(Create, Read, Update, Delete) functionality formanaging data sorted in a PostgreSQL database. It reads the database login details from configuration file and creates a PostgreSQL connection pool. crud.js has a test endpoint for both GET and POST requests, and additional endpoints for CRUD operations, including:<br>
+<b> 4.2 crud.js</b><br>
+crud.js sets up an API with CRUD(Create, Read, Update, Delete) functionality formanaging data sorted in a PostgreSQL database. It reads the database login details from configuration file and creates a PostgreSQL connection pool. crud.js has endpoint for both GET and POST requests, and additional endpoints for CRUD operations, including:<br>
 
 | Reference   | Endpoint                  | Description
 |------|---------------------------|----------------------------|
 | NA   | /userId    | A GET endpoint for retrieving the user_id from the database based on the current logged in user.|
 | A1 | /insertAssetPoint | A POST endpoint for inserting an asset point into the database. It is used to insert asset informations such as asset_name, installation_date, latitude, longitude into the database. |
-| A1 | /insertConditionInformation | A POST endpoint for inserting condition assessment information into the database.
+| A1 | /insertConditionInformation | A POST endpoint for inserting condition assessment information into the database.|
 
 <br>
 
@@ -103,6 +104,17 @@ These endpoints use SQL queries to interact with the database, and the data to b
 
 
 <b> 4.3 geoJSON.js </b> <br>
+geoJSON.js uses Node.js and the Ecpress framework to create RESTful endpoints that return json and geojson data from the PostgresSQL database. endpoints in  geoJSON.js are all a GET requests. These endpoint includes: <br>
 
-
+| Reference     | Endpoint                | Description
+| ------ | ----------------------- | -------------------------------------|
+| A0     | /conditionDetails | A GET endpoint which return a JSON array containing objects that describe different coditions of an element. Each object in the array wo properties - "id" and "condition_description". The "id" property is a unique identifier for the condition, while the "condition_description" property provides a description of the condition.|
+| A2     | /userAssets/:user_id  | A GET endpoint which return GeoJSON file. The endpoint use user_id as an input and returns geoJSON containing asset_id, asset_name, installation_date, latest_condition_report_date and condition_description. it also includes the coordinate (latitude andlongitude) of the asset|
+| A3     | /userConditionReports/:user_id | A GET endpoint which return JSON object containing a single key-value pair. This endpoint takes user_id as input and returns the number of reports submitted by that particular user (num_reports) |
+| L1 | /assetsInGreatCondition | A GET endpoint which return JSON list of assets which are in great condition any point in time (i.e. condition value of 1: "Element is in very good condition") atleast once submitted by any user of the database|
+| L2 | /dailyParticipationRates | A GET endpoint which return JSON array with a single object that contains an array with seven objects, each of which represents a day of the week along with the number of reports submitted and not working on that day (i.e. have condition value of 4 or 5:Not working and maintenance must be done as soon as reasonably possible or Not working and needs immediate, urgent maintenance) |
+| S1 | /userRanking/:user_id | A GET endpoint which return JSON array  that contains a single object with a key-value pair. This endpoint takes user_id as input and returns the user ranking based on the number of reports the user has submitted |
+| S2 | userFiveClosestAssets/:latitude/:longitude | A GET endpoint which return GeoJSON data structure that represents a collection of features, where each feature represents a point on a map. This endpoint takes latitude and longitude of user's position as input to calculate the five closest assets from user's location and returns array_to_json of five closest assets which includes the assets' id, asset_name and installation_date|
+| S3 | /lastFiveConditionReports/:user_id | A GET endpoint which return  a JSON object that represents a feature collection of points geometry (coordinates) with properties. Each point represents an asset, and the properties describe the asset's details, such as its. This endpoint takes user_id as input and returns the last five reports that the user created.   The properties of the assets include id, user_id, asset_name and condition_description|
+| S4 | /conditionReportMissing/:user_id | A GET endpoint which return GeoJSON. The endpoin takes user_id as input and returns assets that the user has not already given a condition report for in the last 3 days|
 
