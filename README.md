@@ -14,6 +14,7 @@ This repository have javascripts files which contain the endpoints of specific U
 4. File Description
 5. Code Reference
 
+
 <b> 1. System Requirements </b> <br>
 * To be able to use the endpoints, it is required to make a connections with the Rocky Linux Server (cloud server). You can use Cyberduck an opoen source application that support variety of transfer protocols including FTP, SFTP (SSH File Transfer Protocol) and many other.
 
@@ -43,4 +44,37 @@ git clone https://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@github.com/ucl-geospa
 6. After installing the required package dependencies, you can start the Node.Js server. You can enter the debug mode throught the command line window by typing:<br>
 <b>node dataAPI.js</b>
 
+
+<b> 3. Testing </b> <br>
+* Ensure that you are connected to UCL wifi or UCL VPN and the node.JS server is active
+
+* To test the <b>GET</b> Request Endpoints: <br>
+Type in the URL in the browser and the output will be returned. For example: <br>
+i. getting the user id using the /userId endpoint, type the following in the browser: https://cege0043-34.cs.ucl.ac.uk/api/userId <br>
+ii. some GET endpoint require you to enter the user id such as the userAssets/:user_id endpoint, type the following in the browser:<br>
+ https://cege0043-34.cs.ucl.ac.uk/api/userAssets/721
+
+* To test the <b>POST</b> Request Endpoints: <br>
+You need to use Postman to test the POST endpoints as the endpoint needed you to enter data to the database server. You are required to enter the parameter and the data manually in BODY> x-www-form-unencoded <br>
+
+For example:<br>
+i. to test /insertAssetPoint endpoint the parameter and data as follows:<br>
+
+| Key  | Value |
+| ------------- | ------------- |
+| asset_name  | hi |
+| installation_date | 2023-04-21 |
+| longitude | -0.1292555  |
+| latitude | 51.5254644 |
+<br>
+
+the installation date are in the form of YYYY-MM-DD
+If the POST endpoints are succesful and working correctly, Postman will return the program message that the data has been inserted into the database.<br>
+
+* Alternatively, you can check if the data was submitted to the database by simply login to PG Admin and check in CEGE0043 schema and View the table for that particular POST endpoint.
+
+* While testing the functionality of this API repository, use of Inspect or Developer mode of the browser to see if any error occurs.
+
+
+<b> 4. File Description </b> <br>
 
