@@ -36,10 +36,10 @@ git clone https://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@github.com/ucl-geospa
 4. Next, type in <b>'npm install'</b> to the command line to intall all of the dependencies listed in your 'package.json' file. This is done as to set up a new development environment or to ensure that all the dependencies are up to date before running a project
 
 5. Alternatively, you can install any dependency individually byt typing for example <b>npm install express</b>. The dependencies needed for this repository includes:
- - express
- - pg
- - fs
- - os
+ - express: for setting up the API
+ - pg: for PostgreSQL connectivity
+ - fs: for file system related functionailty
+ - os: for operating system related functionality
 
 6. After installing the required package dependencies, you can start the Node.Js server. You can enter the debug mode throught the command line window by typing:<br>
 <b>node dataAPI.js</b>
@@ -68,7 +68,7 @@ i. to test /insertAssetPoint endpoint the parameter and data as follows:<br>
 | latitude | 51.5254644 |
 <br>
 
-the installation date are in the form of YYYY-MM-DD
+The installation date are in the form of YYYY-MM-DD
 If the POST endpoints are succesful and working correctly, Postman will return the program message that the data has been inserted into the database.<br>
 
 * Alternatively, you can check if the data was submitted to the database by simply login to PG Admin and check in CEGE0043 schema and View the table for that particular POST endpoint.
@@ -77,4 +77,32 @@ If the POST endpoints are succesful and working correctly, Postman will return t
 
 
 <b> 4. File Description </b> <br>
+In this repository there are three files that are needed for the Node.Js Server to work and endpoints to succesfully run. This include:
+1. dataAPI.js
+2. crud.js (in routes folder)
+3. geoJSON.js (in routes folder)
+
+
+<b>4.1 dataAPI.js</b><br>
+dataAPI.js cretaes a NOde.js server which creates an HTTP server to listedn to incoming requests on port 4480.
+The server uses the Express framework, which provides a set of tools for building web applications and APIs.
+dataAPI.js defines two middleware functions which are crud.js and geoJSON.js that will be used for every incoming request. The server starts listening for incoming requests on port 4480 using the 'httpServer.listen()' method.
+
+<b> 4.3 crud.js </b>
+crud.js sets up an API with CRUD(Create, Read, Update, Delete) functionality formanaging data sorted in a PostgreSQL database. It reads the database login details from configuration file and creates a PostgreSQL connection pool. crud.js has a test endpoint for both GET and POST requests, and additional endpoints for CRUD operations, including:<br>
+
+| Reference   | Endpoint                  | Description
+|------|---------------------------|----------------------------|
+| NA   | /userId    | A GET endpoint for retrieving the user_id from the database based on the current logged in user.|
+| A1 | /insertAssetPoint | A POST endpoint for inserting an asset point into the database. It is used to insert asset informations such as asset_name, installation_date, latitude, longitude into the database. |
+| A1 | /insertConditionInformation | A POST endpoint for inserting condition assessment information into the database.
+
+<br>
+
+These endpoints use SQL queries to interact with the database, and the data to be inserted or retrieved are parsed from the HTTP request data using 'body-parser'. 
+
+
+<b> 4.3 geoJSON.js </b> <br>
+
+
 
