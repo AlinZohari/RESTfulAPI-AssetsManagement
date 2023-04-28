@@ -117,4 +117,12 @@ geoJSON.js uses Node.js and the Ecpress framework to create RESTful endpoints th
 | S2 | userFiveClosestAssets/:latitude/:longitude | A GET endpoint which return GeoJSON data structure that represents a collection of features, where each feature represents a point on a map. This endpoint takes latitude and longitude of user's position as input to calculate the five closest assets from user's location and returns array_to_json of five closest assets which includes the assets' id, asset_name and installation_date|
 | S3 | /lastFiveConditionReports/:user_id | A GET endpoint which return  a JSON object that represents a feature collection of points geometry (coordinates) with properties. Each point represents an asset, and the properties describe the asset's details, such as its. This endpoint takes user_id as input and returns the last five reports that the user created.   The properties of the assets include id, user_id, asset_name and condition_description|
 | S4 | /conditionReportMissing/:user_id | A GET endpoint which return GeoJSON. The endpoin takes user_id as input and returns assets that the user has not already given a condition report for in the last 3 days|
+<br>
+
+<b> 5. Code Reference </b> <br>
+* A large proportion of codes are adapted from the practical notes, lecture and example code in ucl-geospatial example repository of CEGE0043 Web and Mobile GIS by Calire Ellul.
+
+* The adaptation of the query to generate the necessary geoJSON format was done with reference to this source: http://www.postgresonline.com/journal/archives/267-Creating-GeoJSON-Feature-Collections-with-JSON-and-PostGIS-functions.html.
+
+
 
