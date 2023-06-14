@@ -26,9 +26,6 @@ This repository have javascripts files which contain the endpoints of specific U
 <b>2. Deployment </b><br>
 1. Clone the source code of API from Github to server at home/studentuser/code by typing in the command line (terminal) window for Linux Server:
 
-cd /home/studentuser/code
-git clone https://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@github.com/ucl-geospatial-22-23/cege0043-api-22-23-AlinZohari.git -b main
-
 2. Check if you are in the corect repository: ucl-geospatial-22-23/cege0043-api-22-23-AlinZohari
 
 3. Since this repository uses Node.js application, you now have to initialise a new Node.js project in the current directory by typing <b>'npm init'</b> in the command line. After answer the series of questions about the project, a 'package.json' file will be created in your project directory. This store metadata about you project, as well as a list of dependencies that the project relies on.
