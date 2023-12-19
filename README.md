@@ -1,14 +1,13 @@
 # BackEnd: RESTfulAPI for Assets Management Application
 Technical Guide for the API Component. 
-* You can find the FrontEnd Repository of the application [here](https://github.com/AlinZohari/APP-AssetsManagement/tree/main)*
+*You can find the FrontEnd Repository of the application [here](https://github.com/AlinZohari/APP-AssetsManagement/tree/main)*
 
-
+<br>
 This is a RESTful Data API. The resources are represented as URIs(Uniform Resource Identifiers), and the HTTP methds(GET, POST, PUT, DELETE, etc) are used to interact with these resources. The API uses HTTP status code to indicate the success or failure of the request. The RESTful API is stateless, meaning that each request from the client to the server should contain all the necessary information to process the request.
 
 This repository have javascripts files which contain the endpoints of specific URLs that are used to access and enter new data to the database. This endpoint are mainly the GET and POST methods.<br>
 <b>GET</b>: is used to retrieve the data from the database server without making any changes to the server's data <br>
 <b>POST</b>: is used to create or modify an existing data in the database server.
-
 
 <b> Table of Contents </b>
 1. System Requirement
@@ -18,7 +17,7 @@ This repository have javascripts files which contain the endpoints of specific U
 5. Code Reference
 
 
-<b> 1. System Requirements </b> <br>
+## 1. System Requirements
 * To be able to use the endpoints, it is required to make a connections with the Rocky Linux Server (cloud server). You can use Cyberduck an opoen source application that support variety of transfer protocols including FTP, SFTP (SSH File Transfer Protocol) and many other.
 
 * It is required to be connected to UCL eduroam wifi to be able to access this Linux Server. Alternatively if you are outside UCL campus or not connected to eduroam wifi, you can connected to UCL Remote Access VPN. Here is the link and instruction to download and connected to UCL VPN (https://www.ucl.ac.uk/isd/services/get-connected/ucl-virtual-private-network-vpn)
@@ -26,7 +25,7 @@ This repository have javascripts files which contain the endpoints of specific U
 * It would be recommended to download Postman to test the endpoints particularly for the POST endpoints. Postman is a tool used for testing and debugging HTTP-based APIs. It allows to send HTTP requests to API enspoints, view and manipulate the response data, and test the API's functionality. Here is the link for more informations and instructions to download Postman (https://www.postman.com/downloads/)
 
 
-<b>2. Deployment </b><br>
+## 2. Deployment
 1. Clone the source code of API from Github to server at home/studentuser/code by typing in the command line (terminal) window for Linux Server:
 
 2. Check if you are in the corect repository: ucl-geospatial-22-23/cege0043-api-22-23-AlinZohari
@@ -45,7 +44,7 @@ This repository have javascripts files which contain the endpoints of specific U
 <b>node dataAPI.js</b>
 
 
-<b> 3. Testing </b> <br>
+## 3. Testing
 * Ensure that you are connected to UCL wifi or UCL VPN and the node.JS server is active
 
 * To test the <b>GET</b> Request Endpoints: <br>
@@ -77,7 +76,7 @@ If the POST endpoints are succesful and working correctly, Postman will return t
 * While testing the functionality of this API repository, use of Inspect or Developer mode of the browser to see if any error occurs.
 
 
-<b> 4. File Description </b> <br>
+## 4. File Description
 In this repository there are three files that are needed for the Node.Js Server to work and endpoints to succesfully run. This include:
 1. dataAPI.js
 2. crud.js (in routes folder)
@@ -119,7 +118,7 @@ geoJSON.js uses Node.js and the Ecpress framework to create RESTful endpoints th
 | S4 | /conditionReportMissing/:user_id | A GET endpoint which return GeoJSON. The endpoin takes user_id as input and returns assets that the user has not already given a condition report for in the last 3 days|
 <br>
 
-<b> 5. Code Reference </b> <br>
+## 5. Code Reference
 * A large proportion of codes are adapted from the practical notes, lecture and example code in ucl-geospatial example repository of CEGE0043 Web and Mobile GIS by Calire Ellul.
 
 * The adaptation of the query to generate the necessary geoJSON format was done with reference to this source: http://www.postgresonline.com/journal/archives/267-Creating-GeoJSON-Feature-Collections-with-JSON-and-PostGIS-functions.html.
