@@ -2,6 +2,7 @@
 *You can find the FrontEnd Repository of the application [here](https://github.com/AlinZohari/APP-AssetsManagement/tree/main)*<br>
 <br>
 **Below are the Technical Guide for the API Component of the application.**<br>
+<br>
 This is a RESTful Data API. The resources are represented as URIs(Uniform Resource Identifiers), and the HTTP methds(GET, POST, PUT, DELETE, etc) are used to interact with these resources. The API uses HTTP status code to indicate the success or failure of the request. The RESTful API is stateless, meaning that each request from the client to the server should contain all the necessary information to process the request.
 
 This repository have javascripts files which contain the endpoints of specific URLs that are used to access and enter new data to the database. This endpoint are mainly the GET and POST methods.<br>
