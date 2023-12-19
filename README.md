@@ -1,5 +1,5 @@
 # BackEnd: RESTfulAPI for Assets Management Application
-Technical Guide for the API Component. 
+Technical Guide for the API Component.<br>
 *You can find the FrontEnd Repository of the application [here](https://github.com/AlinZohari/APP-AssetsManagement/tree/main)*
 
 <br>
@@ -9,12 +9,12 @@ This repository have javascripts files which contain the endpoints of specific U
 <b>GET</b>: is used to retrieve the data from the database server without making any changes to the server's data <br>
 <b>POST</b>: is used to create or modify an existing data in the database server.
 
-<b> Table of Contents </b>
-1. System Requirement
-2. Deployment
-3. Testing
-4. File Description
-5. Code Reference
+**Table of Contents**
+1. [System Requirement](https://github.com/AlinZohari/RESTfulAPI-AssetsManagement?tab=readme-ov-file#system-requirements)
+2. [Deployment](https://github.com/AlinZohari/RESTfulAPI-AssetsManagement?tab=readme-ov-file#deployment)
+3. [Testing](https://github.com/AlinZohari/RESTfulAPI-AssetsManagement?tab=readme-ov-file#testing)
+4. [File Description](https://github.com/AlinZohari/RESTfulAPI-AssetsManagement?tab=readme-ov-file#file-description)
+5. [Code Reference](https://github.com/AlinZohari/RESTfulAPI-AssetsManagement?tab=readme-ov-file#code-reference)
 
 
 ## System Requirements
